@@ -1,9 +1,12 @@
 // ! REACT IMPORTS
-import React from "react";
+import React, { useState } from "react";
 
 // ! LIBRARY IMPORTS
 import { FaClipboard } from "react-icons/fa";
 import { useForm } from "./useForm";
+
+// ! OTHER IMPORTS
+import { getRandomChar, getSpecialSymbol, utils } from "./utils";
 
 // ? GOAL: CREATE A PASSWORD GENERATOR THAT DOES THE FOLLOWING:
 // ? 1) generate a password with minimum six characters for length for varying passwords
@@ -15,8 +18,9 @@ import { useForm } from "./useForm";
 // TODO: create functionality to randomly generate the password
 
 function App() {
-  // using the useForm
+  // State variables
 
+  //   Holding the values
   const [values, setValues] = useForm({
     // Initial default values
     length: 6,
@@ -25,6 +29,29 @@ function App() {
     number: true,
     symbol: true,
   });
+
+  //   result variables
+  const [result, setResult] = useState("");
+
+  //   fields to modify
+  const fieldsArray = [
+    {
+      field: values.capital,
+      getChar: getRandomChar(65, 90),
+    },
+    {
+      field: values.small,
+      getChar: getRandomChar(97, 122),
+    },
+    {
+      field: values.number,
+      getChar: getRandomChar(48, 57),
+    },
+    {
+      field: values.symbol,
+      getChar: getSpecialSymbol(),
+    },
+  ];
 
   return (
     <section>
@@ -36,6 +63,7 @@ function App() {
               id="result"
               placeholder="Min of 6 chars."
               readOnly
+              value={result}
             />
             <div className="clipboard">
               <FaClipboard></FaClipboard>

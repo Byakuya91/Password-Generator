@@ -3,10 +3,11 @@ import React, { useState } from "react";
 
 // ! LIBRARY IMPORTS
 import { FaClipboard } from "react-icons/fa";
-import { useForm } from "./useForm";
+import { toast } from "react-hot-toast";
 
 // ! OTHER IMPORTS
 import { getRandomChar, getSpecialSymbol } from "./utils";
+import { useForm } from "./useForm";
 
 // ? GOAL: CREATE A PASSWORD GENERATOR THAT DOES THE FOLLOWING:
 // ? 1) generate a password with minimum six characters for length for varying passwords
@@ -33,6 +34,7 @@ function App() {
 
   //   result variables
   const [result, setResult] = useState("");
+  console.log("the result is:", result);
 
   //   fields to modify
   const fieldsArray = [
@@ -88,6 +90,35 @@ function App() {
       }
     }
   };
+  // function ONE METHOD
+  const handleClipboard = async () => {
+    if (result) {
+      console.log("Copying to clipboard:", result);
+      navigator.clipboard
+        .writeText(result)
+        .then(() => {
+          toast.success("Password copied to clipboard!");
+        })
+        .catch((error) => {
+          console.error("Copy to clipboard failed: ", error);
+          toast.error("Failed to copy password to clipboard.");
+        });
+    }
+  };
+
+  // const handleClipboard = async () => {
+  //   if (result) {
+  //     navigator.clipboard.writeText(result)
+  //       .then(() => {
+  //         toast.success("Password copied to clipboard!");
+  //       })
+  //       .catch((error) => {
+  //         console.error("Copy to clipboard failed: ", error);
+  //         toast.error("Failed to copy password to clipboard.");
+  //       });
+  //   }
+  // };
+  // };
 
   return (
     <section>
@@ -101,7 +132,7 @@ function App() {
               readOnly
               value={result}
             />
-            <div className="clipboard">
+            <div className="clipboard" onClick={handleClipboard}>
               <FaClipboard></FaClipboard>
             </div>
           </div>

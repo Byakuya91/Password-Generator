@@ -3,7 +3,8 @@ import React, { useState } from "react";
 
 // ! LIBRARY IMPORTS
 import { FaClipboard } from "react-icons/fa";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // ! OTHER IMPORTS
 import { getRandomChar, getSpecialSymbol } from "./utils";
@@ -34,7 +35,7 @@ function App() {
 
   //   result variables
   const [result, setResult] = useState("");
-  console.log("the result is:", result);
+  // console.log("the result is:", result);
 
   //   fields to modify
   const fieldsArray = [
@@ -83,42 +84,39 @@ function App() {
       if (letter) {
         generatedPassword += letter;
       }
-
-      //  Once the password is generated
-      if (generatedPassword) {
-        setResult(generatedPassword);
-      }
+    }
+    //  Once the password is generated
+    if (generatedPassword) {
+      setResult(generatedPassword);
+    } else {
+      toast.error(" Please select at least one option");
     }
   };
-  // function ONE METHOD
-  const handleClipboard = async () => {
-    if (result) {
-      console.log("Copying to clipboard:", result);
-      navigator.clipboard
-        .writeText(result)
-        .then(() => {
-          toast.success("Password copied to clipboard!");
-        })
-        .catch((error) => {
-          console.error("Copy to clipboard failed: ", error);
-          toast.error("Failed to copy password to clipboard.");
-        });
-    }
-  };
+  // !function ONE METHOD DOES NOT WORK WITH TOASTED NOTIFICATIONS
 
   // const handleClipboard = async () => {
   //   if (result) {
-  //     navigator.clipboard.writeText(result)
+  //     await navigator.clipboard
+  //       .writeText(result)
   //       .then(() => {
-  //         toast.success("Password copied to clipboard!");
+  //         toast.success("Password copied to the clipboard!");
   //       })
   //       .catch((error) => {
   //         console.error("Copy to clipboard failed: ", error);
-  //         toast.error("Failed to copy password to clipboard.");
+  //         toast.error("No password to copy");
   //       });
   //   }
   // };
-  // };
+
+  // Copying to clipboard second method
+  async function handleClipboard() {
+    if (result) {
+      await navigator.clipboard.writeText(result);
+      toast.success("Copied to your clipboard");
+    } else {
+      toast.error("No password to copy");
+    }
+  }
 
   return (
     <section>
